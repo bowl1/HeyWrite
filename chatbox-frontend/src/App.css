@@ -71,8 +71,8 @@ body {
   flex-direction: column;
   gap: 1.5rem;
   margin-bottom: 2rem;
-  @media (min-width: 768px) {
-    flex-direction: row;
+  @media (max-width: 768px) {
+    flex-direction: column;
   }
 }
 
@@ -94,7 +94,14 @@ body {
   border-radius: 0.5rem;
   border: 1px solid #d1d5db;
   outline: none;
+  box-sizing: border-box;
+
+  @media (max-width: 768px) {
+    font-size: 0.8rem;
+    width: 60%;
+  }
 }
+
 
 .select:focus {
   border-color: #2563eb;
