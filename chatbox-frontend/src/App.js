@@ -9,13 +9,17 @@ export default function App() {
   const [loading, setLoading] = useState(false);
   const [copied, setCopied] = useState(false);
 
-
   const handleSubmit = async () => {
     if (!intent.trim()) return;
     setLoading(true);
     setResponse("");
 
-    const res = await fetch("http://localhost:8000/write", {
+    const BASE_URL =
+      process.env.NODE_ENV === "development"
+        ? "http://localhost:8000"
+        : "https://chatbox-cyaxerbma4aucmh7.northeurope-01.azurewebsites.net";
+
+    const res = await fetch(`${BASE_URL}/write`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ intent, style, language }),
@@ -38,15 +42,15 @@ export default function App() {
     <div className="page-container">
       <div className="chat-box">
         <h1 className="title">Hey Write!</h1>
-       
-          <textarea
-            className="intent-textarea"
-            rows={5}
-            placeholder="Describe what you want to write, e.g., an invitation email for a meeting"
-            value={intent}
-            onChange={(e) => setIntent(e.target.value)}
-          ></textarea>
-    
+
+        <textarea
+          className="intent-textarea"
+          rows={5}
+          placeholder="Describe what you want to write, e.g., an invitation email for a meeting"
+          value={intent}
+          onChange={(e) => setIntent(e.target.value)}
+        ></textarea>
+
         <div className="selectors">
           <div className="select-group">
             <label className="label">Choose Tone</label>
@@ -89,11 +93,10 @@ export default function App() {
         {response && (
           <div className="response-box">
             <h2 className="response-title">Your Draft</h2>
-             <button className="copy-button" onClick={handleCopy}>
+            <button className="copy-button" onClick={handleCopy}>
               {copied ? " Copied!" : "Copy"}
             </button>
             <div className="response-text">{response}</div>
-           
           </div>
         )}
       </div>
