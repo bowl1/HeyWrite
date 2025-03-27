@@ -1,5 +1,6 @@
-from fastapi import FastAPI, Request
+from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel
 import requests
 import os
 from dotenv import load_dotenv
@@ -13,21 +14,22 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+class RequestBody(BaseModel):
+    intent: str
+    style: str = "Formal"
+    language: str = "English"
+
 DEEPSEEK_API_KEY = os.getenv("DEEPSEEK_API_KEY")
 DEEPSEEK_API_URL = "https://api.deepseek.com/v1/chat/completions"
 
-@app.post("/write")
-async def generate_text(request: Request):
-    body = await request.json()
-    intent = body.get("intent", "")
-    style = body.get("style", "Formal")
-    language = body.get("language", "English")
 
+@app.post("/write")
+async def generate_text(body: RequestBody):
     system_prompt = (
-        "“You are a professional writing assistant for workplace communication, capable of generating effective and practical text based on the user's intent and desired tone.”"
+        "You are a professional writing assistant for workplace communication, capable of generating effective and practical text based on the user's intent and desired tone."
     )
 
-    user_prompt = f"intent:{intent}\nstyle:{style}\nlanguage:{language}\nPlease generate a suitable text based on the information provided"
+    user_prompt = f"intent:{body.intent}\nstyle:{body.style}\nlanguage:{body.language}\nPlease generate a suitable text based on the information provided"
 
     headers = {
         "Authorization": f"Bearer {DEEPSEEK_API_KEY}",
@@ -49,6 +51,6 @@ async def generate_text(request: Request):
         result = response.json()
         reply = result['choices'][0]['message']['content']
     except Exception as e:
-        reply = f"Something went wrong:{str(e)}"
+        reply = f"Something went wrong: {str(e)}"
 
     return {"reply": reply}
