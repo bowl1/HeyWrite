@@ -40,17 +40,22 @@ https://hey-write.vercel.app/
 
 - Web UI
 
+<div style="display: flex; gap: 10px; flex-wrap: wrap;">
 <img src="images/web1.png" alt="Description" width="300">    
 <img src="images/web2.png" alt="Description" width="300">    
 <img src="images/web3.png" alt="Description" width="300">    
 <img src="images/web4.png" alt="Description" width="300">    
 <img src="images/web5.png" alt="Description" width="300">      
 
+</div>
+
 ---
 
 - Mobile UI
 
+<div style="display: flex; gap: 10px; flex-wrap: wrap;">
 <img src="images/mobile1.png" alt="Description" width="150">    
 <img src="images/mobile2.png" alt="Description" width="150">    
 <img src="images/mobile3.png" alt="Description" width="150">    
 <img src="images/mobile4.png" alt="Description" width="150">    
+</div>
