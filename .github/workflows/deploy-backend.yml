@@ -1,4 +1,4 @@
-name: Deploy FastAPI to Azure
+name: Deploy backend to Azure
 
 on:
   push:
@@ -6,18 +6,17 @@ on:
       - master
 
 jobs:
-  build-and-deploy:
+  deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
+      - name: Checkout repo
         uses: actions/checkout@v2
 
-      - name: Set up Python
-        uses: actions/setup-python@v4
+      - name: Deploy to Azure Web App
+        uses: azure/webapps-deploy@v2
         with:
-          python-version: '3.10'
-
-      - name: Run startup script
-        run: bash startup.sh
-        working-directory: ./chatbox-backend
+          app-name: chatbox          
+          slot-name: production
+          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+          package: ./chatbox-backend 
