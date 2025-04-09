@@ -87,7 +87,7 @@ export default function App() {
           onClick={handleSubmit}
           disabled={loading}
         >
-          {loading ? "Writing..." : "✨ Generate"}
+          {loading ? "Writing... It takes around 1 minute" : "✨ Generate"}
         </button>
 
         {response && (
