@@ -5,5 +5,3 @@ python-dotenv
 langchain
 langchain-community
 langchain_deepseek 
-chromadb
-sentence-transformers
