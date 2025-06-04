@@ -5,12 +5,16 @@ body {
   background: linear-gradient(to bottom right, #dbeafe, #f0f9ff);
 }
 
+input, textarea {
+  font-family: "Poppins", sans-serif;
+}
+
 .page-container {
   display: flex;
   justify-content: center;
-  align-items: center;
   min-height: 100vh;
-  padding: 2rem;
+  padding: 3rem 3rem;
+  gap: 5rem;
 }
 
 .chat-box {
@@ -28,7 +32,7 @@ body {
 }
 
 .title {
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
   font-size: 2rem;
   font-weight: 800;
   text-align: center;
@@ -36,7 +40,6 @@ body {
   margin-bottom: 2rem;
   transition: transform 0.2s ease;
 }
-
 
 .title:hover {
   transform: scale(1.5);
@@ -102,10 +105,16 @@ body {
   }
 }
 
-
 .select:focus {
   border-color: #2563eb;
   box-shadow: 0 0 0 2px #bfdbfe;
+}
+
+.generate-buttons {
+  display: flex;
+  justify-content: space-between;
+  gap: 3rem;
+  margin-top: 1.5rem;
 }
 
 .generate-button {
@@ -114,7 +123,7 @@ body {
   color: white;
   font-size: 1.1rem;
   font-weight: 600;
-  padding: 0.9rem;
+  padding: 0.6rem 1rem;
   border: none;
   border-radius: 0.75rem;
   cursor: pointer;
@@ -162,6 +171,39 @@ body {
   }
 }
 
+.response-controls {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1.5rem;
+}
+
+.undo-button {
+  background-color: #2563eb;
+  color: white;
+  font-size: 1rem;
+  font-weight: 600;
+  padding: 0.6rem 1rem;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+  margin-bottom: 2rem;
+}
+
+.reset-button {
+  background-color: #2563eb;
+  color: white;
+  font-size: 1rem;
+  font-weight: 600;
+  padding: 0.6rem 1rem;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+  margin-bottom: 2rem;
+  margin-left: auto;
+}
+
 .copy-button {
   background-color: #2563eb;
   color: white;
@@ -175,3 +217,32 @@ body {
   display: block;
   margin-left: auto;
 }
+
+.history-panel {
+  background-color: white;
+  padding: 3rem;
+  border-radius: 1.5rem;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  max-width: 800px;
+  width: 100%;
+  box-sizing: border-box;
+
+  @media (max-width: 768px) {
+    padding: 1rem;
+  }
+}
+
+.msg {
+  margin-bottom: 12px;
+  padding: 8px;
+  border-radius: 5px;
+}
+
+.msg.user {
+  background-color: #e0f7fa;
+}
+
+.msg.assistant {
+  background-color: #fff3e0;
+}
+
