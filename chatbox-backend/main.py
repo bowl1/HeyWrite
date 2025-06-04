@@ -6,6 +6,7 @@ import os
 from langchain_runner.rag_chain import generate_with_template
 from dotenv import load_dotenv
 import logging
+import uvicorn
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -96,3 +97,5 @@ def write_with_template(body: RequestBody):
         body.intent, body.style, body.language, body.history
     )
     return {"reply": result}
+
+
