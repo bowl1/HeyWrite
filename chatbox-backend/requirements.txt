@@ -4,6 +4,7 @@ requests
 python-dotenv
 langchain
 langchain-community
-langchain_deepseek 
-chromadb
 langchain-huggingface
+langchain-deepseek
+chromadb
+sentence-transformers

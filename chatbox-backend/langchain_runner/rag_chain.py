@@ -18,8 +18,9 @@ os.environ["TOKENIZERS_PARALLELISM"] = "false"
 
 # 初始化嵌入模型
 embedding = HuggingFaceEmbeddings(
-    model_name="all-MiniLM-L6-v2",
+    model_name="sentence-transformers/paraphrase-MiniLM-L3-v2"
 )
+
 
 # 初始化 Chroma 向量库（假设已经预先插入模板内容）
 try:
