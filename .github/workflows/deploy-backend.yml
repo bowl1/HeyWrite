@@ -13,14 +13,15 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Setup Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.10'
+      - name: Create deployment package
+        run: |
+          cd chatbox-backend
+          zip -r ../deploy.zip .
+          cd ..
 
-      - name: Deploy to Azure Web App (with publish profile)
-        uses: azure/webapps-deploy@v1    
+      - name: Deploy to Azure Web App (zip)
+        uses: azure/webapps-deploy@v1
         with:
-          app-name: chatbox                
+          app-name: chatbox
           publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
-          package: ./chatbox-backend     
+          package: ./deploy.zip
