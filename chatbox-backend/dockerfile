@@ -4,7 +4,7 @@ FROM python:3.10
 WORKDIR /app
 
 # 拷贝依赖文件并安装
-COPY chatbox-backend/requirements.txt .
+COPY requirements.txt .
 
 RUN pip install --no-cache-dir -r requirements.txt
 
