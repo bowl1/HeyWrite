@@ -14,7 +14,7 @@ export default function App() {
   const BASE_URL =
     process.env.NODE_ENV === "development"
       ? "http://localhost:8000"
-      : "https://chatbox-cyaxerbma4aucmh7.northeurope-01.azurewebsites.net";
+      : process.env.REACT_APP_API_URL;
 
   const handleSubmit = async () => {
     if (!intent.trim()) return;
