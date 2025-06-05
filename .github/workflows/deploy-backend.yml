@@ -1,30 +1,35 @@
-name: Deploy FastAPI Backend to Azure
+name: Deploy to EC2
 
 on:
   push:
     branches:
       - master
 
-concurrency:
-  group: backend-deploy
-  cancel-in-progress: true
-
 jobs:
   deploy:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout code
+      - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Setup Python
-        uses: actions/setup-python@v4
+      - name: Copy files to EC2
+        uses: appleboy/scp-action@v0.1.4
         with:
-          python-version: '3.10'
+          host: ${{ secrets.EC2_HOST }}
+          username: ubuntu
+          key: ${{ secrets.EC2_SSH_KEY }}
+          source: "."
+          target: "~/chatbox-backend"
 
-      - name: Deploy to Azure Web App (with publish profile)
-        uses: azure/webapps-deploy@v1    
+      - name: Restart App on EC2
+        uses: appleboy/ssh-action@v0.1.6
         with:
-          app-name: chatbox                
-          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
-          package: ./chatbox-backend      
+          host: ${{ secrets.EC2_HOST }}
+          username: ubuntu
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            cd ~/chatbox-backend
+            git pull
+            source venv/bin/activate
+            pkill -f uvicorn || true
+            nohup uvicorn main:app --host 0.0.0.0 --port 8000 &
