@@ -5,8 +5,7 @@ from langchain.docstore.document import Document
 import os, json
 
 embedding = HuggingFaceEmbeddings(
-    model_name="nomic-ai/nomic-embed-text-v1",
-    model_kwargs={"trust_remote_code": True}
+    model_name="all-MiniLM-L6-v2",
 )
 docs = []
 

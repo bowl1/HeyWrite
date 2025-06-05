@@ -18,8 +18,7 @@ os.environ["TOKENIZERS_PARALLELISM"] = "false"
 
 # 初始化嵌入模型
 embedding = HuggingFaceEmbeddings(
-    model_name="nomic-ai/nomic-embed-text-v1",
-    model_kwargs={"trust_remote_code": True}
+    model_name="all-MiniLM-L6-v2",
 )
 
 # 初始化 Chroma 向量库（假设已经预先插入模板内容）
