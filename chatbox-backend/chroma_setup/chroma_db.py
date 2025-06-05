@@ -1,10 +1,13 @@
 # initialize_chroma.py
 from langchain_community.vectorstores import Chroma
-from langchain_community.embeddings import HuggingFaceEmbeddings
+from langchain_huggingface import HuggingFaceEmbeddings
 from langchain.docstore.document import Document
 import os, json
 
-embedding = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
+embedding = HuggingFaceEmbeddings(
+    model_name="nomic-ai/nomic-embed-text-v1",
+    model_kwargs={"trust_remote_code": True}
+)
 docs = []
 
 TEMPLATE_DIR = "./templates"  
