@@ -1,14 +1,15 @@
-
 FROM python:3.10
 
 # 设置工作目录
 WORKDIR /app
 
-COPY requirements.txt .
+# 拷贝依赖文件并安装
+COPY chatbox-backend/requirements.txt .
 
 RUN pip install --no-cache-dir -r requirements.txt
 
-COPY . .
+# 拷贝整个后端代码（包含 main.py 和其它模块）
+COPY chatbox-backend/ .
 
-# 设置启动命令（启动 FastAPI 应用）
+# 启动 FastAPI 应用
 CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
