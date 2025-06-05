@@ -1,6 +1,6 @@
 from langchain_community.vectorstores import Chroma
 from langchain.prompts import PromptTemplate
-from langchain_community.embeddings import HuggingFaceEmbeddings
+from langchain_huggingface import HuggingFaceEmbeddings
 from langchain.chains import LLMChain
 from langchain_deepseek import ChatDeepSeek
 import os
