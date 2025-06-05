@@ -11,24 +11,16 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v2
 
       - name: Setup Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.10'
 
-      - name: Install zip (if not available)
-        run: sudo apt-get update && sudo apt-get install -y zip
-
-      - name: Create deployment zip package
-        run: |
-          cd chatbox-backend
-          zip -r ../deploy.zip .
-
-      - name: Deploy to Azure Web App (ZIP Deploy)
-        uses: azure/webapps-deploy@v1
+      - name: Deploy to Azure Web App (with publish profile)
+        uses: azure/webapps-deploy@v1    
         with:
-          app-name: chatbox
+          app-name: chatbox                
           publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
-          package: ./deploy.zip
+          package: ./chatbox-backend     
