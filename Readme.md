@@ -24,6 +24,7 @@ Now enhanced with Retrieval-Augmented Generation (RAG), custom templates, multi-
 - Maintains **multi-turn conversation history**
 - Revisit previous results and modify based on that
 - Clear chat history and start a new conversation
+- Summarize and highlight the changes made between the previous version and the newly generated content
 - Control tone and style: Formal, Casual, Polite Push, Concise & Direct, Humorous, or Creative
 - Supports **English**, **Chinese**, and **Danish**
 - One-click copy of generated content
