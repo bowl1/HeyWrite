@@ -1,11 +1,11 @@
-# initialize_chroma.py
+
 from langchain_community.vectorstores import Chroma
 from langchain_huggingface import HuggingFaceEmbeddings
 from langchain.docstore.document import Document
 import os, json
 
 embedding = HuggingFaceEmbeddings(
-    model_name="sentence-transformers/paraphrase-MiniLM-L3-v2"
+    model_name="sentence-transformers/all-MiniLM-L6-v2"
 )
 
 docs = []

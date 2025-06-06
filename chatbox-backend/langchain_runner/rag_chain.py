@@ -18,7 +18,7 @@ os.environ["TOKENIZERS_PARALLELISM"] = "false"
 
 # 初始化嵌入模型
 embedding = HuggingFaceEmbeddings(
-    model_name="sentence-transformers/paraphrase-MiniLM-L3-v2"
+    model_name="sentence-transformers/all-MiniLM-L6-v2"
 )
 
 
@@ -44,17 +44,24 @@ You **must retain** the structure and content of the previous version, and make 
 
 Do **not** rewrite the entire document.
 Do **not** change parts unrelated to the new intent.
-Do **not** invent any new content.
-Do **not** format using Markdown symbols like ##, **, -, or *.
-
-If no changes are needed, return the original text and note "No changes made."
-
-If the reference template does not match the user's intent at all, and no relevant revisions can be made,
-return the following response exactly, and DO NOT include any document body or change summary:
-
-"Did not find any template matched, please try the wild mode."
+Do **not** invent any new content beyond what is clearly implied by the user intent.
 
 Use only plain text for formatting. Separate sections using blank lines if needed.
+
+---
+
+### User Guidance:
+
+If the user's intent is to modify or add to a specific section (e.g., “Comments”, “Summary”, “Tasks”), then:
+
+- If that section exists in the previous version, update it accordingly.
+- If that section does **not** exist, create it in a logically appropriate position in the document.
+- Do not remove or restructure unrelated sections.
+
+If the user's intent has **no meaningful relation** to the reference template or previous version,
+respond with the following text **exactly**, and do not include any document body or change summary:
+
+"Did not find any template matched, please try the wild mode."
 
 ---
 
@@ -77,15 +84,12 @@ Changes:
 - [brief description of change 1]
 - [brief description of change 2]
 (If no changes, write "No changes made.")
-
-Please confirm there were no other changes made beyond what is listed above.
-
 """
 )
 
 # 初始化 DeepSeek 模型
 try:
-    llm = ChatDeepSeek(model="deepseek-chat", temperature=0.5, api_key=DEEPSEEK_API_KEY)
+    llm = ChatDeepSeek(model="deepseek-chat", temperature=0.7, api_key=DEEPSEEK_API_KEY)
     logger.info("DeepSeek 模型初始化成功")
 except Exception as e:
     logger.error(f" DeepSeek 模型初始化失败: {e}")
