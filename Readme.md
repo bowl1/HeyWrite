@@ -1,61 +1,87 @@
 # ✨ HeyWrite - AI Smart Writing Assistant
 
-HeyWrite is a smart AI-powered writing assistant that helps you draft professional office content based on your intent, tone, and language — all with just one sentence.
+HeyWrite is a smart AI-powered writing assistant that helps you draft professional content based on your intent, tone, and language — all with just one sentence.
 
-This app combines a clean React frontend with a FastAPI backend, powered by the AI generative model.
-
----
-
-## Visit
-
-https://hey-write.vercel.app/
-
-
-## Features
-
-- Generate instant writing drafts from your intent
--  Choose tone: Formal, Casual, Polite Push, Concise & Direct, Humorous, Creative
--  Support for English, Chinese, and Danish
--  React frontend (deployed to Vercel)
--  FastAPI backend (deployed to Azure App Service)
--  Environment variables for API security
--  One-click copy of generated content
+Now enhanced with Retrieval-Augmented Generation (RAG), custom templates, multi-turn memory, and more — HeyWrite makes writing faster, smarter, and more personalized.
 
 ---
 
-## Tech Stack
+## 🔗 Visit
 
-| Frontend       | Backend      | AI Model       | Deployment     |
-|----------------|--------------|----------------|----------------|
-| React + CSS    | FastAPI      | DeepSeek Chat  | Vercel + Azure |
+- **Web App**: [https://hey-write.vercel.app](https://hey-write.vercel.app)
+
 
 ---
 
-##  Screenshots
+## 🚀 Features
 
-- Video
+-  Generate instant writing drafts from your one-sentence intent
+- Choose between two generation modes:
+    - Generate with templates: AI automatically matches your input to a relevant predefined template using vector search
+    - Generate something wild: Freely generate content without relying on templates
+- Your intent is automatically matched to the most relevant template using vector search. If no suitable template is found, the app suggests using wild mode for freeform generation.
+
+- Maintains **multi-turn conversation history**
+- Revisit previous results and modify based on that
+- Clear chat history and start a new conversation
+- Control tone and style: Formal, Casual, Polite Push, Concise & Direct, Humorous, or Creative
+- Supports **English**, **Chinese**, and **Danish**
+- One-click copy of generated content
+
+---
+
+## ⚙️ Tech Stack
+
+| Category        | Technology                            |
+|----------------|----------------------------------------|
+| **Frontend**    | React (deployed via Vercel)           |
+| **Backend**     | FastAPI (Dockerized, deployed on AWS EC2) |
+| **AI Model**    | DeepSeek Chat API                     |
+| **Embedding**   | HuggingFace (`intfloat/e5-small-v2`)  |
+| **Vector Store**| ChromaDB                              |
+| **Frameworks**  | LangChain for RAG and template routing |
+| **Deployment**  | Docker + Nginx + HTTPS (Let’s Encrypt), GitHub Actions, AWS EC2|
+---
+
+## 📂 Architecture Overview
+
+1. **Intent Input** →  
+2. **Vector Search (Chroma + LangChain Retriever)** →  
+3. **LLM Prompting with Context** →  
+4. **Document Draft Output**  
+5. **Editable + Copyable + Chat History Aware**
+
+---
+
+## 📸 Screenshots
+
+### Web Demo
 
 ![Demo GIF](./images/demo.gif)
 
+---
 
-- Web UI
 
+### Web UI
+
+#### 📄 User Case: Project Weekly Report  
 <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-<img src="images/web1.png" alt="Description" width="300">    
-<img src="images/web2.png" alt="Description" width="300">    
-<img src="images/web3.png" alt="Description" width="300">    
-<img src="images/web4.png" alt="Description" width="300">    
-<img src="images/web5.png" alt="Description" width="300">      
+  <img src="images/web1.png" alt="Web UI 1" width="300">    
+  <img src="images/web2.png" alt="Web UI 2" width="300">    
+  <img src="images/web3.png" alt="Web UI 3" width="300">    
+</div>
 
+#### ⚠️ No Matched Template (using "Generate with templates" button)  
+<div style="display: flex; gap: 10px; flex-wrap: wrap;">
+  <img src="images/web4.png" alt="Web UI 4" width="300">  
+</div>
+
+#### 📑 User Case: Contract Risk Review  
+<div style="display: flex; gap: 10px; flex-wrap: wrap;">
+  <img src="images/web5.png" alt="Web UI 5" width="300">  
+  <img src="images/web6.png" alt="Web UI 6" width="300">  
+  <img src="images/web7.png" alt="Web UI 7" width="300">  
+  <img src="images/web8.png" alt="Web UI 8" width="300">  
 </div>
 
 ---
-
-- Mobile UI
-
-<div style="display: flex; gap: 10px; flex-wrap: wrap;">
-<img src="images/mobile1.png" alt="Description" width="150">    
-<img src="images/mobile2.png" alt="Description" width="150">    
-<img src="images/mobile3.png" alt="Description" width="150">    
-<img src="images/mobile4.png" alt="Description" width="150">    
-</div>
