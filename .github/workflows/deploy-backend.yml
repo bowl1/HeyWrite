@@ -20,15 +20,24 @@ jobs:
           username: ubuntu
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
-            sudo apt update
-            sudo apt install docker.io -y
-            # 若已存在旧代码，先删除
-            rm -rf chatbox-backend
-            # 拉取仓库
-            git clone https://github.com/bowl1/HeyWrite.git
-            cd HeyWrite/chatbox-backend
-            echo "DEEPSEEK_API_KEY=${{ secrets.DEEPSEEK_API_KEY }}" > .env
+            set -e  # 遇到错误立即退出
+
+            echo "Cleaning up old instance..."
             docker stop chatbox-backend || true
             docker rm chatbox-backend || true
-            docker build -t chatbox-backend .
-            docker run -d --name chatbox-backend -p 8000:8000 chatbox-backend
+            rm -rf HeyWrite
+
+            echo "Cloning repository..."
+            git clone https://github.com/bowl1/HeyWrite.git
+            cd HeyWrite/chatbox-backend
+
+            echo "Injecting environment variables..."
+            echo "DEEPSEEK_API_KEY=${{ secrets.DEEPSEEK_API_KEY }}" > .env
+
+            echo "Building Docker image..."
+            docker build --network=host -t chatbox-backend .
+
+            echo "Running Docker container..."
+            docker run -d --name chatbox-backend --env-file .env -p 8000:8000 chatbox-backend
+
+            echo "Deployment completed!"
