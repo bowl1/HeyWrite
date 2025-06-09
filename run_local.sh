@@ -8,7 +8,7 @@ echo "Backend started with PID $BACK_PID"
 
 # 启动前端
 cd ../chatbox-frontend
-npm run start
+npm start
 
 # 前端关闭后，再杀后端
 echo "Frontend exited. Stopping backend..."

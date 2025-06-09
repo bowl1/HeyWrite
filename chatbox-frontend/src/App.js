@@ -1,7 +1,28 @@
 import React, { useState } from "react";
-import "./App.css";
+import Select from "react-select";
+import {
+  PageContainer,
+  ChatBox,
+  Title,
+  IntentTextarea,
+  Selectors,
+  SelectGroup,
+  Label,
+  StyledSelect,
+  ResponseControls,
+  UndoButton,
+  ResetButton,
+  GenerateButtons,
+  GenerateButton,
+  ResponseBox,
+  ResponseTitle,
+  CopyButton,
+  ResponseText,
+  HistoryPanel,
+  Message,
+} from "./App-style.js";
 
-export default function App() {
+export default function Home() {
   const [intent, setIntent] = useState("");
   const [style, setStyle] = useState("Formal");
   const [language, setLanguage] = useState("English");
@@ -10,6 +31,21 @@ export default function App() {
   const [loading, setLoading] = useState(false);
   const [copied, setCopied] = useState(false);
   const [history, setHistory] = useState([]);
+
+  const toneOptions = [
+    { value: "Formal", label: "Formal" },
+    { value: "Casual", label: "Casual" },
+    { value: "Polite Push", label: "Polite Push" },
+    { value: "Concise & Direct", label: "Concise & Direct" },
+    { value: "Humorous", label: "Humorous" },
+    { value: "Creative", label: "Creative" },
+  ];
+
+  const languageOptions = [
+    { value: "English", label: "English" },
+    { value: "Danish", label: "Dansk" },
+    { value: "Chinese", label: "中文" },
+  ];
 
   const BASE_URL =
     process.env.NODE_ENV === "development"
@@ -44,45 +80,50 @@ export default function App() {
     setLoading(true);
     setLastResponse(response);
     setResponse("");
-  
+
     try {
       const res = await fetch(`${BASE_URL}/write_with_template`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ intent, style, language, history: history || [] }),
+        body: JSON.stringify({
+          intent,
+          style,
+          language,
+          history: history || [],
+        }),
       });
-  
+
       if (!res.ok) {
         const errText = await res.text();
         throw new Error(`Server returned ${res.status}: ${errText}`);
       }
-  
+
       const data = await res.json();
-      const parsed = data.reply; 
-  
+      const parsed = data.reply;
+
       setResponse(parsed);
       setHistory([
         ...history,
         { role: "user", content: intent },
-        { role: "assistant", content: parsed},
+        { role: "assistant", content: parsed },
       ]);
     } catch (error) {
       console.error("Error in handleSubmitWithTemplate:", error);
       alert(`Generation failed: ${error.message}`);
-      setResponse(""); 
+      setResponse("");
     } finally {
       setLoading(false);
     }
   };
   const handleUndo = () => {
     setResponse(lastResponse);
-  
+
     const newHistory = [...history];
     for (let i = newHistory.length - 1; i >= 0; i--) {
       if (newHistory[i].role === "assistant") {
         newHistory[i] = {
           role: "assistant",
-          content: lastResponse, 
+          content: lastResponse,
         };
         break;
       }
@@ -99,100 +140,85 @@ export default function App() {
   };
 
   return (
-    <div className="page-container">
-      <div className="chat-box">
-        <h1 className="title">Hey Write!</h1>
+    <PageContainer className="page-home">
+      <ChatBox>
+        <Title>Hey Write!</Title>
 
-        <textarea
-          className="intent-textarea"
+        <IntentTextarea
           rows={5}
           placeholder="Describe what you want to write, e.g., an invitation email for a meeting"
           value={intent}
           onChange={(e) => setIntent(e.target.value)}
-        ></textarea>
+        />
 
-        <div className="selectors">
-          <div className="select-group">
-            <label className="label">Choose Tone</label>
-            <select
-              className="select"
-              value={style}
-              onChange={(e) => setStyle(e.target.value)}
-            >
-              <option value="Formal">Formal</option>
-              <option value="Casual">Casual</option>
-              <option value="Polite Push">Polite Push</option>
-              <option value="Concise & Direct">Concise & Direct</option>
-              <option value="Humorous">Humorous</option>
-              <option value="Creative">Creative</option>
-            </select>
-          </div>
+        <Selectors>
+          <SelectGroup>
+            <Label>Choose Tone</Label>
+            <Select
+              styles={StyledSelect}
+              options={toneOptions}
+              value={toneOptions.find((option) => option.value === style)}
+              onChange={(selectedOption) => setStyle(selectedOption.value)}
+              isSearchable={false}
+            />
+          </SelectGroup>
 
-          <div className="select-group">
-            <label className="label">Language</label>
-            <select
-              className="select"
-              value={language}
-              onChange={(e) => setLanguage(e.target.value)}
-            >
-              <option value="English">English</option>
-              <option value="Danish">Dansk</option>
-              <option value="Chinese">中文</option>
-            </select>
-          </div>
-        </div>
+          <SelectGroup>
+            <Label>Language</Label>
+            <Select
+              styles={StyledSelect}
+              options={languageOptions}
+              value={languageOptions.find(
+                (option) => option.value === language
+              )}
+              onChange={(selectedOption) => setLanguage(selectedOption.value)}
+              isSearchable={false}
+            />
+          </SelectGroup>
+        </Selectors>
 
-        <div className="response-controls">
+        <ResponseControls>
           {lastResponse && (
-            <button className="undo-button" onClick={handleUndo}>
+            <UndoButton onClick={handleUndo}>
               ⬅️ Back to Last Version
-            </button>
+            </UndoButton>
           )}
-
-          <button className="reset-button" onClick={() => setHistory([])}>
+          <ResetButton onClick={() => setHistory([])}>
             🔄 Reset Conversation
-          </button>
-        </div>
+          </ResetButton>
+        </ResponseControls>
 
-        <div className="generate-buttons">
-          <button
-            className="generate-button"
-            onClick={handleSubmitWithTemplate}
-            disabled={loading}
-          >
+        <GenerateButtons>
+          <GenerateButton onClick={handleSubmitWithTemplate} disabled={loading}>
             Generate with Template
-          </button>
-          <button
-            className="generate-button"
-            onClick={handleSubmit}
-            disabled={loading}
-          >
+          </GenerateButton>
+          <GenerateButton onClick={handleSubmit} disabled={loading}>
             {loading
               ? "Writing... It takes around 1 minute"
               : "✨ Generate something wild"}
-          </button>
-        </div>
+          </GenerateButton>
+        </GenerateButtons>
 
         {response && (
-          <div className="response-box">
-            <h2 className="response-title">Your Draft</h2>
-            <button className="copy-button" onClick={handleCopy}>
+          <ResponseBox>
+            <ResponseTitle>Your Draft</ResponseTitle>
+            <CopyButton onClick={handleCopy}>
               {copied ? "Copied!" : "Copy"}
-            </button>
-            <div className="response-text">{response}</div>
-          </div>
+            </CopyButton>
+            <ResponseText>{response}</ResponseText>
+          </ResponseBox>
         )}
-      </div>
+      </ChatBox>
 
-      <div className="history-panel">
+      <HistoryPanel>
         <h2>🕒 Conversation History</h2>
         {history.map((msg, index) => (
-          <div key={index} className={`msg ${msg.role}`}>
+          <Message key={index} className={msg.role}>
             <strong>{msg.role === "user" ? "You" : "HeyWrite"}:</strong>
             <p>{msg.content}</p>
-          </div>
+          </Message>
         ))}
-      </div>
-    </div>
+      </HistoryPanel>
+    </PageContainer>
   );
 }
