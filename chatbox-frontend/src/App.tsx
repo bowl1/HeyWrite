@@ -18,7 +18,11 @@ import {
   Message,
 } from "./App-style";
 
-import { toneOptions, languageOptions, CustomSelect } from "./components/option";
+import {
+  toneOptions,
+  languageOptions,
+  CustomSelect,
+} from "./components/option";
 
 const Home: React.FC = () => {
   const [intent, setIntent] = useState<string>("");
@@ -28,9 +32,9 @@ const Home: React.FC = () => {
   const [lastResponse, setLastResponse] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
   const [copied, setCopied] = useState<boolean>(false);
-  const [history, setHistory] = useState<{ role: string; content: string }[]>(
-    []
-  );
+  const [history, setHistory] = useState<
+    { role: "user" | "assistant"; content: string }[]
+  >([]);
 
   const BASE_URL =
     process.env.NODE_ENV === "development"
@@ -180,7 +184,7 @@ const Home: React.FC = () => {
       <HistoryPanel>
         <h2>🕒 Conversation History</h2>
         {history.map((msg, index) => (
-          <Message key={index} className={msg.role}>
+          <Message key={index} className={msg.role} role={msg.role}>
             <strong>{msg.role === "user" ? "You" : "HeyWrite"}:</strong>
             <p>{msg.content}</p>
           </Message>
