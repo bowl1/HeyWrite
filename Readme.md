@@ -35,7 +35,7 @@ Now enhanced with Retrieval-Augmented Generation (RAG), custom templates, multi-
 
 | Category        | Technology                            |
 |----------------|----------------------------------------|
-| **Frontend**    | React (deployed via Vercel)           |
+| **Frontend**    | React + TypeScript (deployed via Vercel)|
 | **Backend**     | FastAPI (Dockerized, deployed on AWS EC2) |
 | **AI Model**    | DeepSeek Chat API                     |
 | **Embedding**   | HuggingFace (`intfloat/e5-small-v2`)  |
