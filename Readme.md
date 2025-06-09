@@ -92,8 +92,8 @@ Now enhanced with Retrieval-Augmented Generation (RAG), custom templates, multi-
 ![Demo GIF](./images/demo-mobile.gif)
 
 <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-  <img src="images/mobile1.png" alt="Web UI 5" width="300">  
-  <img src="images/mobile2.png" alt="Web UI 6" width="300">  
-  <img src="images/mobile3.png" alt="Web UI 7" width="300">  
-  <img src="images/mobile4.png" alt="Web UI 8" width="300">  
+  <img src="images/mobile1.png" alt="Web UI 5" width="200">  
+  <img src="images/mobile2.png" alt="Web UI 6" width="200">  
+  <img src="images/mobile3.png" alt="Web UI 7" width="200">  
+  <img src="images/mobile4.png" alt="Web UI 8" width="200">  
 </div>
