@@ -13,11 +13,7 @@ export type OptionType = {
 
 export const toneOptions: OptionType[] = [
   { value: "Formal", label: "Formal" },
-  { value: "Casual", label: "Casual" },
-  { value: "Polite Push", label: "Polite Push" },
-  { value: "Concise & Direct", label: "Concise & Direct" },
   { value: "Humorous", label: "Humorous" },
-  { value: "Creative", label: "Creative" },
 ];
 
 export const languageOptions: OptionType[] = [

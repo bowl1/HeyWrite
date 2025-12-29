@@ -8,3 +8,4 @@ langchain-huggingface
 langchain-deepseek
 chromadb
 sentence-transformers
+pypdf
