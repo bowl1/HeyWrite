@@ -89,11 +89,11 @@ const Home = () => {
         <Card className="w-full border-blue-100/70 bg-white/90 shadow-xl shadow-blue-100/40 backdrop-blur lg:w-2/3">
           <CardHeader className="pb-3">
             <div className="flex items-center justify-center gap-2">
-              <span className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-pink-100 text-lg">✨</span>
-              <CardTitle className="text-center text-3xl font-black text-blue-700">
+              <span className="inline-flex h-11 w-11 items-center justify-center text-xl">✨</span>
+              <CardTitle className="heading-caveat text-center text-5xl font-black text-blue-700">
                 Ask me anything
               </CardTitle>
-              <span className="inline-flex h-8 items-center rounded-full bg-blue-50 px-3 text-xs font-semibold text-blue-700">
+              <span className="ml-3 inline-flex h-8 items-center rounded-full bg-blue-50 px-3 text-xs font-semibold text-blue-700">
                 PDF-powered
               </span>
             </div>
