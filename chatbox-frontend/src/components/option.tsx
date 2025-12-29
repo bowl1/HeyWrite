@@ -1,11 +1,15 @@
-import React from "react";
-import Select from "react-select";
-import { SelectGroup, Label, StyledSelect } from "../App-style";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "./ui/select";
 
-export interface OptionType {
+export type OptionType = {
   value: string;
   label: string;
-}
+};
 
 export const toneOptions: OptionType[] = [
   { value: "Formal", label: "Formal" },
@@ -22,28 +26,38 @@ export const languageOptions: OptionType[] = [
   { value: "Chinese", label: "中文" },
 ];
 
-// 自定义封装组件
-interface CustomSelectProps {
+type CustomSelectProps = {
   label: string;
   options: OptionType[];
   value: OptionType | null;
   onChange: (option: OptionType | null) => void;
-}
+};
 
-export const CustomSelect: React.FC<CustomSelectProps> = ({
+export const CustomSelect = ({
   label,
   options,
   value,
   onChange,
-}) => (
-  <SelectGroup>
-    <Label>{label}</Label>
+}: CustomSelectProps) => (
+  <div className="flex flex-col gap-2">
+    <label className="text-sm font-semibold text-slate-800">{label}</label>
     <Select
-      styles={StyledSelect}
-      options={options}
-      value={value}
-      onChange={onChange}
-      isSearchable={false}
-    />
-  </SelectGroup>
+      value={value?.value}
+      onValueChange={(val) => {
+        const selected = options.find((opt) => opt.value === val) || null;
+        onChange(selected);
+      }}
+    >
+      <SelectTrigger>
+        <SelectValue placeholder="Select" />
+      </SelectTrigger>
+      <SelectContent>
+        {options.map((option) => (
+          <SelectItem key={option.value} value={option.value}>
+            {option.label}
+          </SelectItem>
+        ))}
+      </SelectContent>
+    </Select>
+  </div>
 );
