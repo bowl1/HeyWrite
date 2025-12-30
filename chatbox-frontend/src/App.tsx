@@ -122,12 +122,15 @@ const Home = () => {
                 ✨
               </span>
               <CardTitle className="heading-caveat text-center text-5xl font-black text-blue-700">
-                Ask me anything
+                PaperPal
               </CardTitle>
               <span className="ml-3 inline-flex h-8 items-center rounded-full bg-blue-50 px-3 text-xs font-semibold text-blue-700">
                 PDF-powered
               </span>
             </div>
+            <p className="mt-2 text-center text-sm text-blue-700">
+              Have a conversation with your documents.
+            </p>
           </CardHeader>
           <CardContent className="space-y-6">
             <UploadCard
@@ -172,17 +175,6 @@ const Home = () => {
               />
             </div>
 
-            <div className="flex items-center justify-end gap-4">
-              <Button
-                onClick={() => setHistory([])}
-                variant="outline"
-                className="w-full"
-                size="sm"
-              >
-                🔄 Reset Conversation
-              </Button>
-            </div>
-
             <div className="flex flex-col gap-3 lg:flex-row">
               <Button
                 onClick={handleSubmit}
@@ -213,7 +205,7 @@ const Home = () => {
           </CardContent>
         </Card>
 
-        <HistoryCard history={history} />
+        <HistoryCard history={history} onReset={() => setHistory([])} />
       </div>
     </div>
   );

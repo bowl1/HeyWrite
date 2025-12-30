@@ -30,6 +30,7 @@ chatbox-backend/build/
 chatbox-backend/chatbox_backend.egg-info/
 chatbox-backend/chroma_db/
 chatbox-backend/chroma db/
+chatbox-backend/*.egg-info/
 
 # misc
 .DS_Store

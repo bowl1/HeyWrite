@@ -1,12 +1,14 @@
 import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
+import { Button } from "./ui/button";
 import { type ConversationMessage } from "../lib/api";
 
 type HistoryCardProps = {
   history: ConversationMessage[];
+  onReset: () => void;
 };
 
-const HistoryCard = ({ history }: HistoryCardProps) => {
+const HistoryCard = ({ history, onReset }: HistoryCardProps) => {
   return (
     <Card className="w-full border-pink-100/70 bg-white/90 shadow-xl shadow-pink-100/40 backdrop-blur lg:w-1/3">
       <CardHeader className="pb-2">
@@ -31,7 +33,7 @@ const HistoryCard = ({ history }: HistoryCardProps) => {
               }`}
             >
               <strong className="text-slate-800">
-                {msg.role === "user" ? "You" : "HeyWrite"}:
+                {msg.role === "user" ? "You" : "PaperPal"}:
               </strong>
               <p className="mt-1 text-slate-700">{msg.content}</p>
             </div>
@@ -41,6 +43,16 @@ const HistoryCard = ({ history }: HistoryCardProps) => {
               Start chatting to see your conversation history here.
             </p>
           )}
+          <div className="flex justify-end">
+            <Button
+              onClick={onReset}
+              variant="outline"
+              className="mt-3 w-auto rounded-full border-pink-200 bg-white/80 text-pink-700 shadow-sm hover:bg-pink-50"
+              size="sm"
+            >
+              🔄 Reset Conversation
+            </Button>
+          </div>
         </div>
       </CardContent>
     </Card>
