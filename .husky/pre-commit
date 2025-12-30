@@ -7,4 +7,13 @@ npm run lint
 
 echo "🧪 Running backend tests..."
 cd ../chatbox-backend || exit 1
-pytest
+ARCH_PREFIX=""
+if command -v arch >/dev/null 2>&1 && [ "$(sysctl -n hw.optional.arm64 2>/dev/null)" = "1" ]; then
+  ARCH_PREFIX="arch -arm64"
+fi
+
+$ARCH_PREFIX /bin/bash -lc '
+  source .venv/bin/activate
+  export PYTEST_DISABLE_PLUGIN_AUTOLOAD=1
+  pytest
+'

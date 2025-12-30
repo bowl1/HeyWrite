@@ -4,30 +4,41 @@ from typing import List
 from unittest.mock import MagicMock
 
 import pytest
-from langchain.schema import Document
+from langchain_core.documents import Document
 
 # RAG behavior tests
 
 @pytest.fixture()
 def rag_chain(monkeypatch):
-    """构造 stub 避免真实依赖并返回 rag_chain 模块。"""
     stub_llm = MagicMock()
-    stub_llm.predict = MagicMock(return_value="stub answer")
+    stub_llm.predict.return_value = "stub answer"
 
     stub_llm_chain = MagicMock()
-    stub_llm_chain.predict = MagicMock(return_value="stub answer")
+    stub_llm_chain.predict.return_value = "stub answer"
 
     stub_retriever = MagicMock()
-    stub_retriever.get_relevant_documents = MagicMock(return_value=[])
+    stub_retriever.get_relevant_documents.return_value = []
 
     stub_vectorstore = MagicMock()
     stub_vectorstore.as_retriever.return_value = stub_retriever
     stub_vectorstore.get.return_value = {"documents": [], "metadatas": []}
 
-    monkeypatch.setattr("langchain_deepseek.ChatDeepSeek", lambda *args, **kwargs: stub_llm)
-    monkeypatch.setattr("langchain_huggingface.HuggingFaceEmbeddings", lambda *args, **kwargs: MagicMock())
-    monkeypatch.setattr("langchain_community.vectorstores.Chroma", lambda *args, **kwargs: stub_vectorstore)
-    monkeypatch.setattr("langchain.chains.LLMChain", lambda *args, **kwargs: stub_llm_chain)
+    monkeypatch.setattr(
+        "langchain_runner.rag_chain.ChatDeepSeek",
+        lambda *args, **kwargs: stub_llm
+    )
+    monkeypatch.setattr(
+        "langchain_runner.rag_chain.HuggingFaceEmbeddings",
+        lambda *args, **kwargs: MagicMock()
+    )
+    monkeypatch.setattr(
+        "langchain_runner.rag_chain.Chroma",
+        lambda *args, **kwargs: stub_vectorstore
+    )
+    monkeypatch.setattr(
+        "langchain_runner.rag_chain.LLMChain",
+        lambda *args, **kwargs: stub_llm_chain
+    )
 
     sys.modules.pop("langchain_runner.rag_chain", None)
     module = importlib.import_module("langchain_runner.rag_chain")

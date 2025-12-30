@@ -6,17 +6,55 @@ from pathlib import Path
 from typing import List, Tuple
 
 from dotenv import load_dotenv
-from langchain.chains import LLMChain
-from langchain.prompts import PromptTemplate
-from langchain.text_splitter import RecursiveCharacterTextSplitter
+
+try:
+    from langchain.prompts import PromptTemplate  # LangChain < 0.2 style
+except ImportError:
+    from langchain_core.prompts import PromptTemplate
+
+try:
+    from langchain.text_splitter import RecursiveCharacterTextSplitter
+except ImportError:
+    from langchain_text_splitters import RecursiveCharacterTextSplitter
+
 from langchain_community.vectorstores import Chroma
 from langchain_deepseek import ChatDeepSeek
 from langchain_huggingface import HuggingFaceEmbeddings
 from pypdf import PdfReader
-from langchain.schema import Document
+from langchain_core.documents import Document
+
+try:
+    from langchain.chains.llm import LLMChain  # Old import path
+except ImportError:
+    class LLMChain:
+        """Minimal fallback to keep working with newer LangChain versions."""
+
+        def __init__(self, llm, prompt):
+            self.llm = llm
+            self.prompt = prompt
+
+        def predict(self, **kwargs):
+            text = self.prompt.format(**kwargs)
+            if hasattr(self.llm, "predict"):
+                return self.llm.predict(text)
+            if hasattr(self.llm, "invoke"):
+                return self.llm.invoke(text)
+            raise AttributeError("LLM object must implement predict() or invoke()")
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
+
+class _RetrieverAdapter:
+    """Compat wrapper to provide get_relevant_documents on newer retrievers."""
+
+    def __init__(self, retriever):
+        self._retriever = retriever
+
+    def get_relevant_documents(self, query):
+        return self._retriever.invoke(query)
+
+    def __getattr__(self, name):
+        return getattr(self._retriever, name)
 
 ROOT_ENV = Path(__file__).resolve().parents[2] / ".env"
 load_dotenv(dotenv_path=ROOT_ENV)
@@ -28,7 +66,8 @@ embedding = HuggingFaceEmbeddings(model_name="intfloat/e5-small-v2")
 try:
     persist_directory = "./chroma_db"
     vectorstore = Chroma(persist_directory=persist_directory, embedding_function=embedding)
-    retriever = vectorstore.as_retriever(search_kwargs={"k": 4})
+    base_retriever = vectorstore.as_retriever(search_kwargs={"k": 4})
+    retriever = base_retriever if hasattr(base_retriever, "get_relevant_documents") else _RetrieverAdapter(base_retriever)
     logger.info("Successfully loaded Chroma vector library")
 except Exception as e:
     logger.error(f"Failed to load Chroma vector library: {e}")

@@ -11,12 +11,25 @@
 # production
 /build
 
+# python virtualenv
+chatbox-backend/.venv/
+
 # Python cache
 __pycache__/
 *.py[cod]
 
+# pytest cache
+.pytest_cache/
+chatbox-backend/.pytest_cache/
+
 # Node modules (frontend)
 chatbox-frontend/node_modules/
+
+# backend build artifacts
+chatbox-backend/build/
+chatbox-backend/chatbox_backend.egg-info/
+chatbox-backend/chroma_db/
+chatbox-backend/chroma db/
 
 # misc
 .DS_Store
