@@ -5,6 +5,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "./ui/select";
+import { cn } from "../lib/utils";
 
 export type OptionType = {
   value: string;
@@ -27,6 +28,7 @@ type CustomSelectProps = {
   options: OptionType[];
   value: OptionType | null;
   onChange: (option: OptionType | null) => void;
+  className?: string;
 };
 
 export const CustomSelect = ({
@@ -34,9 +36,12 @@ export const CustomSelect = ({
   options,
   value,
   onChange,
+  className,
 }: CustomSelectProps) => (
-  <div className="flex flex-col gap-2">
-    <label className="text-sm font-semibold text-slate-800">{label}</label>
+  <div className="flex items-center gap-3">
+    <label className="heading-caveat text-lg font-semibold text-slate-800 whitespace-nowrap">
+      {label}
+    </label>
     <Select
       value={value?.value}
       onValueChange={(val) => {
@@ -44,7 +49,7 @@ export const CustomSelect = ({
         onChange(selected);
       }}
     >
-      <SelectTrigger>
+      <SelectTrigger className={cn("w-full", className)}>
         <SelectValue placeholder="Select" />
       </SelectTrigger>
       <SelectContent>

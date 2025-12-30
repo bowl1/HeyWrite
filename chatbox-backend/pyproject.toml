@@ -1,0 +1,27 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "chatbox-backend"
+version = "0.0.1"
+description = "Chatbox backend with LangChain RAG"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+  "fastapi",
+  "uvicorn",
+  "requests",
+  "python-dotenv",
+  "langchain",
+  "langchain-community",
+  "langchain-huggingface",
+  "langchain-deepseek",
+  "chromadb",
+  "sentence-transformers",
+  "pypdf",
+  "pytest",
+]
+
+[tool.setuptools]
+packages = ["langchain_runner"]

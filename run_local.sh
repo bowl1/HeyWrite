@@ -19,4 +19,9 @@ VITE_API_URL="http://127.0.0.1:${BACKEND_PORT}" npm run dev
 
 # 前端退出后，停止后端
 echo "Frontend exited. Stopping backend..."
-kill $BACK_PID
+if kill -0 "$BACK_PID" >/dev/null 2>&1; then
+  kill "$BACK_PID"
+  echo "Backend (PID $BACK_PID) stopped."
+else
+  echo "Backend process already stopped."
+fi

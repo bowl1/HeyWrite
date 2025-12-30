@@ -1,0 +1,10 @@
+#!/bin/sh
+
+echo "🎨 Running frontend format & lint..."
+cd chatbox-frontend  || exit 1
+npm run format
+npm run lint
+
+echo "🧪 Running backend tests..."
+cd ../chatbox-backend || exit 1
+pytest

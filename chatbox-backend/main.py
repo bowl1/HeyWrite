@@ -3,7 +3,12 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import requests
 import os
-from langchain_runner.rag_chain import answer_with_context, add_pdf_to_vectorstore
+from langchain_runner.rag_chain import (
+    answer_with_context,
+    add_pdf_to_vectorstore,
+    delete_pdfs,
+    summarize_all_docs,
+)
 from dotenv import load_dotenv
 import logging
 import uvicorn
@@ -34,6 +39,15 @@ class RequestBody(BaseModel):
     history: list[ChatMessage] = []  # 对话历史
 
 
+class DeleteRequest(BaseModel):
+    files: list[str]
+
+
+class SummaryRequest(BaseModel):
+    style: str = "Formal"
+    language: str = "English"
+
+
 DEEPSEEK_API_KEY = os.getenv("DEEPSEEK_API_KEY")
 DEEPSEEK_API_URL = "https://api.deepseek.com/v1/chat/completions"
 
@@ -49,23 +63,35 @@ async def generate_text(body: RequestBody):
 
 
 @app.post("/upload_pdf")
-async def upload_pdf(files: list[UploadFile] = File(...)):
-    if not files:
-        raise HTTPException(status_code=400, detail="No files uploaded.")
-    if len(files) > 5:
-        raise HTTPException(status_code=400, detail="Maximum 5 PDFs allowed.")
+async def upload_pdf(file: UploadFile = File(...)):
+    if not file:
+        raise HTTPException(status_code=400, detail="No file uploaded.")
+    if not file.filename.lower().endswith(".pdf"):
+        raise HTTPException(status_code=400, detail=f"{file.filename} is not a PDF.")
 
-    results = []
-    for file in files:
-        if not file.filename.lower().endswith(".pdf"):
-            raise HTTPException(status_code=400, detail=f"{file.filename} is not a PDF.")
-        file_bytes = await file.read()
-        try:
-            chunk_count = add_pdf_to_vectorstore(file_bytes, file.filename)
-            logger.info(f"[API] /upload_pdf file={file.filename} chunks={chunk_count}")
-            results.append({"file": file.filename, "chunks": chunk_count})
-        except Exception as e:
-            logger.error(f"Failed to ingest PDF {file.filename}: {e}", exc_info=True)
-            raise HTTPException(status_code=500, detail=f"Ingest failed for {file.filename}: {e}")
+    file_bytes = await file.read()
+    try:
+        chunk_count = add_pdf_to_vectorstore(file_bytes, file.filename)
+        logger.info(f"[API] /upload_pdf file={file.filename} chunks={chunk_count}")
+    except Exception as e:
+        logger.error(f"Failed to ingest PDF {file.filename}: {e}", exc_info=True)
+        raise HTTPException(status_code=500, detail=f"Ingest failed for {file.filename}: {e}")
 
-    return {"status": "ok", "files": results}
+    return {"status": "ok", "file": file.filename, "chunks": chunk_count}
+
+
+@app.post("/delete_files")
+async def delete_files(body: DeleteRequest):
+    if not body.files:
+        raise HTTPException(status_code=400, detail="No files provided.")
+    deleted = delete_pdfs(body.files)
+    logger.info(f"[API] /delete_files files={body.files} deleted={deleted}")
+    return {"status": "ok", "deleted": deleted}
+
+
+@app.post("/summarize")
+async def summarize(body: SummaryRequest):
+    logger.info(f"[API] /summarize lang={body.language} style={body.style}")
+    reply = summarize_all_docs(body.language, body.style)
+    logger.info(f"[API] /summarize reply_len={len(reply)}")
+    return {"reply": reply}
