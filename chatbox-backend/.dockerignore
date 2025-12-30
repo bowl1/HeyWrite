@@ -1,5 +1,14 @@
+.venv
 __pycache__/
 *.pyc
 *.pyo
-
-.git
+*.pyd
+*.db
+*.sqlite3
+*.log
+chroma_db/
+build/
+chatbox_backend.egg-info/
+*.egg-info/
+node_modules
+.pytest_cache/

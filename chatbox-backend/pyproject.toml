@@ -13,6 +13,7 @@ dependencies = [
   "uvicorn",
   "requests",
   "python-dotenv",
+  "python-multipart",
   "langchain",
   "langchain-community",
   "langchain-text-splitters",

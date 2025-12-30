@@ -1,18 +1,21 @@
+import requests
+import os
+from pathlib import Path
+
+from dotenv import load_dotenv
+from openai import AuthenticationError
 from fastapi import FastAPI, UploadFile, File, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
-import requests
-import os
 from langchain_runner.qa import answer_with_context
 from langchain_runner.vectorstore import add_pdf_to_vectorstore, delete_pdfs
 from langchain_runner.summarize import summarize_all_docs
-from dotenv import load_dotenv
 import logging
 import uvicorn
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
-load_dotenv()
+load_dotenv(dotenv_path=Path(__file__).resolve().parents[1] / ".env")
 
 app = FastAPI()
 

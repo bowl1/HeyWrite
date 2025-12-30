@@ -11,6 +11,8 @@ from langchain_core.documents import Document
 
 @pytest.fixture()
 def rag_chain(monkeypatch):
+    monkeypatch.setenv("DEEPSEEK_API_KEY", "DUMMY_FOR_TESTS")
+
     stub_qa_chain = MagicMock()
     stub_qa_chain.invoke.return_value = "stub answer"
 

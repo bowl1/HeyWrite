@@ -122,7 +122,7 @@ const Home = () => {
                 ✨
               </span>
               <CardTitle className="heading-caveat text-center text-5xl font-black text-blue-700">
-                PaperPal
+                AskMyDocs
               </CardTitle>
               <span className="ml-3 inline-flex h-8 items-center rounded-full bg-blue-50 px-3 text-xs font-semibold text-blue-700">
                 PDF-powered
@@ -192,7 +192,7 @@ const Home = () => {
                 className="w-full"
                 size="lg"
               >
-                {summarizing ? "Summarizing..." : "Summarize PDF"}
+                {summarizing ? "Summarizing takes around 1 minute..." : "Summarize PDF"}
               </Button>
             </div>
 

@@ -33,7 +33,7 @@ const HistoryCard = ({ history, onReset }: HistoryCardProps) => {
               }`}
             >
               <strong className="text-slate-800">
-                {msg.role === "user" ? "You" : "PaperPal"}:
+                {msg.role === "user" ? "You" : "AskMyDocs"}:
               </strong>
               <p className="mt-1 text-slate-700">{msg.content}</p>
             </div>

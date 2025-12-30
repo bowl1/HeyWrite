@@ -1,0 +1,29 @@
+version: "3.9"
+
+services:
+  backend:
+    build:
+      context: ./chatbox-backend
+      dockerfile: dockerfile
+    env_file:
+      - ./.env
+    environment:
+      - HF_HOME=/app/.cache/huggingface
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./chatbox-backend/chroma_db:/app/chroma_db
+      - ./chatbox-backend/hf_cache:/app/.cache/huggingface
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./chatbox-frontend
+      dockerfile: Dockerfile
+    environment:
+      - VITE_API_URL=http://backend:8000
+    ports:
+      - "4173:4173"
+    depends_on:
+      - backend
+    restart: unless-stopped

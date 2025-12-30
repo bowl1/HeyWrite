@@ -1,17 +1,21 @@
 import os
+from pathlib import Path
 from typing import Any
 
+from dotenv import load_dotenv
 from langchain_core.output_parsers import StrOutputParser
 from langchain_deepseek import ChatDeepSeek
 
 from .prompts import qa_prompt, summary_map_prompt, summary_reduce_prompt
 
+# Ensure we load the repo root .env before instantiating the LLM
+load_dotenv(dotenv_path=Path(__file__).resolve().parents[2] / ".env")
+
 
 def build_llm(model: str = "deepseek-chat", temperature: float = 0.3, **kwargs: Any):
     api_key = kwargs.pop("api_key", None) or os.getenv("DEEPSEEK_API_KEY")
-    if api_key is None:
-        # In test environments we stub the model, so allow missing key by providing a dummy.
-        api_key = "DUMMY_FOR_TESTS"
+    if not api_key:
+        raise RuntimeError("DEEPSEEK_API_KEY not set; cannot initialize DeepSeek client")
     return ChatDeepSeek(model=model, temperature=temperature, api_key=api_key, **kwargs)
 
 
