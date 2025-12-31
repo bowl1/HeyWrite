@@ -14,7 +14,7 @@ import {
   type ConversationMessage,
   type Source,
   summarizeDocs,
-} from "./lib/api";
+} from "./api";
 import UploadCard from "./components/UploadCard";
 import ResponseSection from "./components/ResponseSection";
 import HistoryCard from "./components/HistoryCard";
@@ -192,7 +192,9 @@ const Home = () => {
                 className="w-full"
                 size="lg"
               >
-                {summarizing ? "Summarizing takes around 1 minute..." : "Summarize PDF"}
+                {summarizing
+                  ? "Summarizing takes around 1 minute..."
+                  : "Summarize PDF"}
               </Button>
             </div>
 

@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import { Button } from "./ui/button";
 
 type UploadCardProps = {
@@ -19,11 +19,44 @@ const UploadCard = ({
   onRemove,
 }: UploadCardProps) => {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const [isDragOver, setIsDragOver] = useState(false);
 
   const triggerFileSelect = () => fileInputRef.current?.click();
 
+  const handleFile = (file: File | null) => {
+    if (!file) return;
+    if (
+      file.type === "application/pdf" ||
+      file.name.toLowerCase().endsWith(".pdf")
+    ) {
+      onFileChange(file);
+    } else {
+      onFileChange(null);
+    }
+  };
+
+  const handleDrop = (event: React.DragEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    setIsDragOver(false);
+    const file = event.dataTransfer.files?.[0] || null;
+    handleFile(file);
+  };
+
   return (
-    <div className="rounded-2xl border border-dashed border-blue-200 bg-white/70 p-4 shadow-inner">
+    <div
+      className={`rounded-2xl border border-dashed ${
+        isDragOver ? "border-blue-400 bg-blue-50" : "border-blue-200 bg-white/70"
+      } p-4 shadow-inner transition`}
+      onDragOver={(e) => {
+        e.preventDefault();
+        setIsDragOver(true);
+      }}
+      onDragLeave={(e) => {
+        e.preventDefault();
+        setIsDragOver(false);
+      }}
+      onDrop={handleDrop}
+    >
       <div className="space-y-3 rounded-xl border border-slate-200 bg-white/90 px-4 py-3 text-sm font-semibold text-slate-800 shadow-sm">
         <div className="flex items-center gap-3">
           <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-blue-600 text-white shadow">
@@ -32,7 +65,7 @@ const UploadCard = ({
           <div className="flex flex-col">
             <span>Upload a PDF to ground answers</span>
             <span className="text-xs font-normal text-slate-500">
-              The more relevant the PDF, the better the answer
+              Drag & drop or choose a PDF. The more relevant the PDF, the better the answer.
             </span>
           </div>
         </div>
@@ -41,9 +74,6 @@ const UploadCard = ({
             <span className="inline-flex h-8 w-8 items-center justify-center rounded-md bg-blue-100">
               {pdfFile.name.slice(0, 2).toUpperCase()}
             </span>
-            <div className="max-w-xs truncate" title={pdfFile.name}>
-              {pdfFile.name}
-            </div>
             <button
               type="button"
               onClick={onRemove}
@@ -61,7 +91,7 @@ const UploadCard = ({
         accept="application/pdf"
         onChange={(e) => {
           const file = e.target.files?.[0] || null;
-          onFileChange(file);
+          handleFile(file);
         }}
         className="hidden"
       />

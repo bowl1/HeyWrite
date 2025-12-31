@@ -1,99 +1,121 @@
-# ✨ HeyWrite - AI Smart Writing Assistant
+# ✨ AskMyDocs - RAG Assistant
 
-HeyWrite is a smart AI-powered writing assistant that helps you draft professional content based on your intent, tone, and language — all with just one sentence.
-
-Now enhanced with Retrieval-Augmented Generation (RAG), custom templates, multi-turn memory, and more — HeyWrite makes writing faster, smarter, and more personalized.
-
----
-
-## 🔗 Visit
-
-- **Web App**: [https://hey-write.vercel.app](https://hey-write.vercel.app)
-
+AskMyDocs is a PDF-focused RAG assistant that only answers from your PDFs, always cites page sources, and refuses to hallucinate. Upload a PDF (current version supports one document at a time; multi-document support is planned), ask grounded questions, and summarize your document set with traceable references.
 
 ---
 
 ## 🚀 Features
 
--  Generate instant writing drafts from your one-sentence intent
-- Choose between two generation modes:
-    - Generate with templates: AI automatically matches your input to a relevant predefined template using vector search
-    - Generate something wild: Freely generate content without relying on templates
-- Your intent is automatically matched to the most relevant template using vector search. If no suitable template is found, the app suggests using wild mode for freeform generation.
-
-- Maintains **multi-turn conversation history**
-- Revisit previous results and modify based on that
-- Clear chat history and start a new conversation
-- Summarize and highlight the changes made between the previous version and the newly generated content
-- Control tone and style: Formal, Casual, Polite Push, Concise & Direct, Humorous, or Creative
-- Supports **English**, **Chinese**, and **Danish**
-- One-click copy of generated content
+- PDF upload and ingestion to Chroma (HuggingFace `intfloat/e5-small-v2` embeddings)
+- RAG QA with inline page citations; refuses answers not grounded in context
+- Whole-library summarization
+- Conversation history and tone/language controls
+- One-click copy of responses
 
 ---
 
 ## ⚙️ Tech Stack
 
 | Category        | Technology                            |
-|----------------|----------------------------------------|
-| **Frontend**    | React + TypeScript (deployed via Vercel)|
-| **Backend**     | FastAPI (Dockerized, deployed on AWS EC2) |
-| **AI Model**    | DeepSeek Chat API                     |
-| **Embedding**   | HuggingFace (`intfloat/e5-small-v2`)  |
-| **Vector Store**| ChromaDB                              |
-| **Frameworks**  | LangChain for RAG and template routing |
-| **Deployment**  | Docker + Nginx + HTTPS (Let’s Encrypt), GitHub Actions, AWS EC2|
+|-----------------|---------------------------------------|
+| Frontend        | React + TypeScript + Vite             |
+| Backend         | FastAPI, LangChain (LCEL)             |
+| Model           | LLM Chat API                     |
+| Embeddings      | HuggingFace `intfloat/e5-small-v2`    |
+| Vector Store    | ChromaDB                              |
+| Deployment      | Backend on AWS EC2 (Docker), Frontend on Vercel |
+
 ---
+
+## 🧭 Project Structure
+
+```
+.
+├── chatbox-backend/          # Backend
+│   ├── main.py               # FastAPI entrypoint
+│   ├── langchain_runner/     # LangChain pipelines
+│   │   ├── chains.py         # Chain assembly
+│   │   ├── qa.py             # RAG QA flow
+│   │   ├── summarize.py      # Library/document summaries
+│   │   ├── prompts.py        # Prompt templates
+│   │   └── vectorstore.py    # Chroma ingestion + retrieval
+│   ├── tests/                # Backend tests
+│   ├── startup.sh            # Container startup helper
+│   ├── requirements.txt      # Python deps
+│   └── dockerfile            # Backend container
+
+├── chatbox-frontend/         # Frontend
+│   ├── src/                  # React/Vite UI
+│   │   ├── components/       # UI blocks
+│   │   ├── lib/              # Client helpers (e.g., utils)
+│   │   ├── assets/           # UI assets (not README screenshots)
+│   │   ├── api.ts            # API client
+│   │   └── App.tsx           # App shell
+│   └── Dockerfile            # Frontend container
+├── docker-compose.yml        # Local orchestration (frontend + backend + Chroma)
+├── run_local.sh              # Helper to launch locally
+```
+
+---
+
 
 ## 📂 Architecture Overview
 
-1. **Intent Input** →  
-2. **Vector Search (Chroma + LangChain Retriever)** →  
-3. **LLM Prompting with Context** →  
-4. **Document Draft Output**  
-5. **Editable + Copyable + Chat History Aware**
+### Backend (FastAPI + LangChain)
+1) PDF ingest → split + embed → Chroma vector store  
+2) Query → retriever → context assembly  
+3) LLM with page-citation guardrail  
+4) Answer with sources or refusal  
+5) Library-level summarization
+
+### Frontend (React/Vite)
+1) Upload PDFs and trigger ingestion  
+2) Chat UI for RAG QA with inline citations  
+3) Conversation history, tone/language controls, copy-to-clipboard  
+4) API calls to backend RAG endpoints
+
 
 ---
-
-## 📸 Screenshots
-
-### Web Demo
-
-![Demo GIF](./images/demo.gif)
-
----
-
 
 ### Web UI
 
-#### 📄 User Case: Project Weekly Report  
+#### demo
+![Demo GIF](./images/demo-web.gif)
+
+#### Screenshots
+
+#### 📄 User Case: 
 <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-  <img src="images/web1.png" alt="Web UI 1" width="300">    
-  <img src="images/web2.png" alt="Web UI 2" width="300">    
-  <img src="images/web3.png" alt="Web UI 3" width="300">    
+  <img src="images/web1.png" alt="Web UI 1" width="300">  
 </div>
 
-#### ⚠️ No Matched Template (using "Generate with templates" button)  
+#### 📄 Summarize: 
 <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-  <img src="images/web4.png" alt="Web UI 4" width="300">  
+  <img src="images/web2.png" alt="Web UI 2" width="300">  
 </div>
 
-#### 📑 User Case: Contract Risk Review  
+#### 📄 Question: 
 <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-  <img src="images/web5.png" alt="Web UI 5" width="300">  
-  <img src="images/web6.png" alt="Web UI 6" width="300">  
-  <img src="images/web7.png" alt="Web UI 7" width="300">  
-  <img src="images/web8.png" alt="Web UI 8" width="300">  
+  <img src="images/web3.png" alt="Web UI 3" >    
 </div>
+
+#### ⚠️ No Matched Answer:
+<div style="display: flex; gap: 10px; flex-wrap: wrap;">
+  <img src="images/web4.png" alt="Web UI 4">  
+</div>
+
 
 ---
 
 ### Mobile UI
 
+#### demo
+
 ![Demo GIF](./images/demo-mobile.gif)
 
+#### Screenshots
+
 <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-  <img src="images/mobile1.png" alt="Web UI 5" width="200">  
-  <img src="images/mobile2.png" alt="Web UI 6" width="200">  
-  <img src="images/mobile3.png" alt="Web UI 7" width="200">  
-  <img src="images/mobile4.png" alt="Web UI 8" width="200">  
+  <img src="images/mobile1.png" alt="mobile UI 1" width="300">  
+  <img src="images/mobile2.png" alt="mobile UI 2" width="300">  
 </div>

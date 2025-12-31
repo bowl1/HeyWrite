@@ -1,6 +1,6 @@
 import React from "react";
 import { Button } from "./ui/button";
-import { type Source } from "../lib/api";
+import { type Source } from "../api";
 
 type ResponseSectionProps = {
   response: string;

@@ -8,7 +8,8 @@ If the answer is not in the context, say: "I cannot find the answer in the provi
 Respond in the requested language: {language}
 Use the requested tone/style: {style}
 
-Keep the answer concise and cite page numbers inline when relevant, e.g., (page 3).
+Always include at least one inline page citation. Use "(page X)" in most cases; use "(第X页)" for Chinese, "(side X)" for Danish, and "(seite X)" for German. Pull page numbers from the provided context.
+Keep the answer concise and cite page numbers inline, e.g., (page 3).
 
 Question: {question}
 

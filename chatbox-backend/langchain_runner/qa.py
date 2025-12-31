@@ -1,4 +1,5 @@
 import logging
+import re
 from typing import List, Tuple
 
 from langchain_core.documents import Document
@@ -26,8 +27,20 @@ def answer_with_context(question: str, language: str, style: str) -> Tuple[str, 
 
     result = qa_chain.invoke({"question": question, "context": context, "language": language, "style": style}).strip()
 
-    # 🔒 Guardrail：如果没有引用 page，拒答
-    if "(page" not in result.lower():
+    # 🔒 Guardrail：如果没有引用 page，拒答 (allow localized markers)
+    citation_patterns = [
+        r"(?:\(|（)\s*page\s*\d+",
+        r"(?:\(|（)\s*p\.\s*\d+",
+        r"(?:\(|（)?\s*第?\s*\d+\s*页",
+        r"(?:\(|（)?\s*side\s*\d+",
+        r"(?:\(|（)?\s*seite\s*\d+",
+        r"page\s*\d+",
+        r"p\.\s*\d+",
+        r"第\s*\d+\s*页",
+        r"side\s*\d+",
+        r"seite\s*\d+",
+    ]
+    if not any(re.search(pattern, result, flags=re.IGNORECASE) for pattern in citation_patterns):
         return "I cannot find the answer in the provided documents.", []
 
     sources = []

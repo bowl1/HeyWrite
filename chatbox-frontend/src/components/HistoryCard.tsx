@@ -1,7 +1,7 @@
 import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { Button } from "./ui/button";
-import { type ConversationMessage } from "../lib/api";
+import { type ConversationMessage } from "../api";
 
 type HistoryCardProps = {
   history: ConversationMessage[];
