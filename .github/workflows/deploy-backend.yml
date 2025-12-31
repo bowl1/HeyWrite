@@ -24,7 +24,7 @@ jobs:
 
             echo "Cleaning up old instance..."
             docker stop chatbox-backend || true
-            docker rm chatbox-backend || true
+            docker rm chatbox-backend || true  
             rm -rf HeyWrite
 
             echo "Cloning repository..."
