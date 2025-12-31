@@ -45,7 +45,9 @@ const UploadCard = ({
   return (
     <div
       className={`rounded-2xl border border-dashed ${
-        isDragOver ? "border-blue-400 bg-blue-50" : "border-blue-200 bg-white/70"
+        isDragOver
+          ? "border-blue-400 bg-blue-50"
+          : "border-blue-200 bg-white/70"
       } p-4 shadow-inner transition`}
       onDragOver={(e) => {
         e.preventDefault();
@@ -65,7 +67,8 @@ const UploadCard = ({
           <div className="flex flex-col">
             <span>Upload a PDF to ground answers</span>
             <span className="text-xs font-normal text-slate-500">
-              Drag & drop or choose a PDF. The more relevant the PDF, the better the answer.
+              Drag & drop or choose a PDF. The more relevant the PDF, the better
+              the answer.
             </span>
           </div>
         </div>

@@ -86,12 +86,12 @@ AskMyDocs is a PDF-focused RAG assistant that only answers from your PDFs, alway
 
 #### 📄 User Case: 
 <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-  <img src="images/web1.png" alt="Web UI 1" width="300">  
+  <img src="images/web1.png" alt="Web UI 1">  
 </div>
 
 #### 📄 Summarize: 
 <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-  <img src="images/web2.png" alt="Web UI 2" width="300">  
+  <img src="images/web2.png" alt="Web UI 2">  
 </div>
 
 #### 📄 Question: 
