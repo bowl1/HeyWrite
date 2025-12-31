@@ -4,6 +4,10 @@ AskMyDocs is a PDF-focused RAG assistant that only answers from your PDFs, alway
 
 ---
 
+Live demo: https://askmydocument.vercel.app/
+
+---
+
 ## 🚀 Features
 
 - PDF upload and ingestion to Chroma (HuggingFace `intfloat/e5-small-v2` embeddings)
